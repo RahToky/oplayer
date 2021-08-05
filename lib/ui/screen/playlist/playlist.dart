@@ -1,13 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:oplayer/model/song/song_item.dart';
 import 'package:oplayer/ui/widget/appbar/appbar.dart';
-import 'package:oplayer/ui/widget/item/music_list_item.dart';
+import 'package:oplayer/ui/widget/item/playlist_item.dart';
+import 'package:oplayer/usecase/song/song_usecase.dart';
 
-class PlayListScreen extends StatelessWidget {
+class PlaylistScreen extends StatelessWidget {
   static final String routeName = "/playlist";
-  final String currentMusicTitle = "Warm Fuzzy Feeling";
-  final String currentMusicSinger = "Maya Koeva";
+  final String playlistName = "Warm Fuzzy Feeling";
+  final String playlistCreator = "Maya Koeva";
+
+  SongUseCase _audioUseCase = SongUseCase();
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,7 @@ class PlayListScreen extends StatelessWidget {
       appBar: MyAppBar(title: null),
       body: Container(
         alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(left: kTabLabelPadding.left,right: kTabLabelPadding.left),
+        // margin: EdgeInsets.only(left: kTabLabelPadding.left, right: kTabLabelPadding.left),
         child: Column(
           children: [
             Expanded(
@@ -24,16 +28,14 @@ class PlayListScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: size.height*0.02),
+                  SizedBox(height: size.height * 0.02),
                   Text(
-                    '$currentMusicTitle',
-                    style: GoogleFonts.lato(
-                      textStyle: Theme.of(context).textTheme.headline1,
-                    ),
+                    '$playlistName',
+                    style: Theme.of(context).textTheme.headline1,
                   ),
-                  SizedBox(height: size.height*0.01),
+                  SizedBox(height: size.height * 0.01),
                   Text(
-                    'by $currentMusicSinger',
+                    'by $playlistCreator',
                     style: Theme.of(context).textTheme.caption,
                   ),
                 ],
@@ -43,7 +45,24 @@ class PlayListScreen extends StatelessWidget {
               flex: 9,
               child: Container(
                 alignment: Alignment.topCenter,
-                child: const MusicListItem(),
+                child: FutureBuilder<List<Song>>(
+                  future: _audioUseCase.getSongs(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<Song> songs = snapshot.data!;
+                      return ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: songs.length,
+                        itemBuilder: (context, index) {
+                          return PlaylistItem(key:Key('$index'),song: songs[index]);
+                        },
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
               ),
             ),
           ],

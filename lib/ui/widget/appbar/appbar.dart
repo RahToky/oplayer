@@ -16,27 +16,32 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       padding: 10,
       title: Text('${title ?? Strings.appName}'),
       actions: [
-        FittedBox(
-          child: NeumorphicButton(
-            onPressed: () {
-              print("onClick");
-            },
-            style: NeumorphicStyle(
-              shape: NeumorphicShape.concave,
-              boxShape:
-                  NeumorphicBoxShape.roundRect(BorderRadius.circular(10.0)),
-              depth: 5,
-              shadowLightColor: Colors.white,
-              intensity: 0.9,
-              border: NeumorphicBorder(
-                color: Colors.white24,
-                width: 2,
+        Container(
+          alignment: Alignment.center,
+          child: AspectRatio(
+            aspectRatio: 1/1,
+            child: FittedBox(
+              child: NeumorphicButton(
+                onPressed: () {
+                  print("onClick");
+                },
+                style: NeumorphicStyle(
+                  shape: NeumorphicShape.concave,
+                  boxShape:
+                      NeumorphicBoxShape.roundRect(BorderRadius.circular(10.0)),
+                  depth: 5,
+                  shadowLightColor: Colors.white,
+                  intensity: 0.9,
+                  border: NeumorphicBorder(
+                    color: Colors.white24,
+                    width: 2,
+                  ),
+                ),
+                padding: const EdgeInsets.all(5.0),
+                child: Icon(
+                  Icons.more_horiz,
+                ),
               ),
-            ),
-            padding: const EdgeInsets.all(10.0),
-            child: Icon(
-              Icons.more_horiz,
-              color: Colors.deepPurpleAccent,
             ),
           ),
         ),

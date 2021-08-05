@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:oplayer/ui/screen/playlist/detail.dart';
 import 'package:oplayer/ui/screen/playlist/playlist.dart';
 
 import 'const/colors.dart';
@@ -22,31 +23,35 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       darkTheme: NeumorphicThemeData(
-          baseColor: Color(0xff333333),
-          accentColor: Colors.green,
-          lightSource: LightSource.topLeft,
-          depth: 5,
-          intensity: 0.9,
-          appBarTheme: NeumorphicAppBarThemeData(
-            centerTitle: true,
-          )),
+        baseColor: Color(0xff333333),
+        accentColor: Color(0xFFF6C09D),
+        lightSource: LightSource.topLeft,
+        depth: 5,
+        intensity: 0.9,
+        appBarTheme: NeumorphicAppBarThemeData(
+          centerTitle: true,
+        ),
+      ),
       theme: NeumorphicThemeData(
-        baseColor: Color(0xffD3E0EC),
-        accentColor: Colors.cyan,
+        baseColor: MyColors.baseColor,
+        accentColor: Color(0xFFF6C09D),
         lightSource: LightSource.topLeft,
         shadowLightColor: Colors.white,
         shadowDarkColor: Colors.grey,
         borderColor: Colors.white,
         depth: 5,
         intensity: 0.9,
+        iconTheme: IconThemeData(
+          color: MyColors.iconColor,
+        ),
         buttonStyle: NeumorphicStyle(
-          shape: NeumorphicShape.concave,
+          shape: NeumorphicShape.convex,
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(10.0)),
           depth: 8,
           shadowLightColor: Colors.white,
           intensity: 0.8,
           border: NeumorphicBorder(
-            color: Colors.grey,
+            color: MyColors.buttonBorderColor,
             width: 2,
           ),
         ),
@@ -56,18 +61,32 @@ class MyApp extends StatelessWidget {
         ),
         textTheme: TextTheme(
           headline1: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 23,
-            color: MyColors.headline1Color,
-          ),
+              fontWeight: FontWeight.w900,
+              fontSize: 23,
+              color: MyColors.headline1Color,
+              fontFamily: 'OpenSans'),
+          headline2: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              color: MyColors.headline1Color,
+              fontFamily: 'OpenSans'),
           caption: TextStyle(
             color: MyColors.captionColor,
             fontSize: 14,
+            fontFamily: 'OpenSans',
+          ),
+          bodyText1: TextStyle(
+            color: MyColors.captionColor,
+            fontSize: 17,
+            fontFamily: 'OpenSans',
           ),
         ),
       ),
-      initialRoute: PlayListScreen.routeName,
-      routes: {PlayListScreen.routeName: (context) => PlayListScreen()},
+      initialRoute: PlaylistScreen.routeName,
+      routes: {
+        PlaylistScreen.routeName: (context) => PlaylistScreen(),
+        DetailScreen.routeName: (context) => DetailScreen(),
+      },
     );
   }
 }

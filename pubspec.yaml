@@ -1,5 +1,5 @@
 name: oplayer
-description: A new Flutter project.
+description: Audio player.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -24,7 +24,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_neumorphic: ^3.0.3
-  google_fonts:
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -40,6 +39,14 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: fonts/OpenSans-Bold.ttf
+        - asset: fonts/OpenSans-BoldItalic.ttf
+        - asset: fonts/OpenSans-Italic.ttf
+        - asset: fonts/OpenSans-Light.ttf
+        - asset: fonts/OpenSans-Regular.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
