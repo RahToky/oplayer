@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:oplayer/const/colors.dart';
 import 'package:oplayer/const/strings.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -19,7 +20,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         Container(
           alignment: Alignment.center,
           child: AspectRatio(
-            aspectRatio: 1/1,
+            aspectRatio: 1 / 1,
             child: FittedBox(
               child: NeumorphicButton(
                 onPressed: () {
@@ -27,13 +28,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 },
                 style: NeumorphicStyle(
                   shape: NeumorphicShape.concave,
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(10.0)),
+                  boxShape: NeumorphicBoxShape.roundRect(
+                    BorderRadius.circular(10.0),
+                  ),
                   depth: 5,
                   shadowLightColor: Colors.white,
                   intensity: 0.9,
                   border: NeumorphicBorder(
-                    color: Colors.white24,
+                    color: MyColors.neumorphicBorder,
                     width: 2,
                   ),
                 ),

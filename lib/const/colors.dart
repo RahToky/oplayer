@@ -8,4 +8,5 @@ abstract class MyColors {
   static final iconColor = Color(0xFF3c3f41);
   static final progressBgColor = Color(0xFFc5c9d4);
   static final progressColor = Colors.orangeAccent;
+  static final neumorphicBorder = Colors.white24;
 }

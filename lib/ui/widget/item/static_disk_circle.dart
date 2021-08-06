@@ -9,6 +9,7 @@ class DiskImage extends StatelessWidget {
   final double elevation;
   final double centerWidth;
   final String defaultCdImagePath = 'assets/images/cd.png';
+  final bool animate;
 
   const DiskImage(
       {this.path,
@@ -18,7 +19,8 @@ class DiskImage extends StatelessWidget {
       this.borderWidth = 0.0,
       this.elevation = 5.0,
       this.centerBorderWidth = 0,
-      this.centerWidth = 12.0});
+      this.centerWidth = 12.0,
+      this.animate=false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,9 @@ class DiskImage extends StatelessWidget {
       elevation: elevation,
       shape: CircleBorder(
         side: BorderSide(
-            color: borderColor ?? Colors.transparent, width: borderWidth),
+          color: borderColor ?? Colors.transparent,
+          width: borderWidth,
+        ),
       ),
       clipBehavior: Clip.antiAlias,
       child: AspectRatio(
