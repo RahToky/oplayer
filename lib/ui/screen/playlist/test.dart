@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:path_provider_ex/path_provider_ex.dart';
+import 'package:permission_handler/permission_handler.dart';
 //import package files
 
 //apply this class on home: attribute at MaterialApp()
@@ -20,14 +21,16 @@ class _MyAudioList extends State<MyAudioList>{
   var files;
 
   void getFiles() async { //asyn function to get list of files
-    List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
-    var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
-    var fm = FileManager(root: Directory(root)); //
-    files = await fm.filesTree(
-        excludedPaths: ["/storage/emulated/0/Android"],
-        extensions: ["mp3"] //optional, to filter files, list only mp3 files
-    );
-    setState(() {}); //update the UI
+    if (await Permission.storage.request().isGranted) {
+      List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
+      var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
+      var fm = FileManager(root: Directory(root)); //
+      files = await fm.filesTree(
+          excludedPaths: ["/storage/emulated/0/Android"],
+          extensions: ["mp3"] //optional, to filter files, list only mp3 files
+      );
+      setState(() {}); //update the UI
+    }
   }
 
   @override
