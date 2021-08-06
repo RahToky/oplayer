@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
 import 'package:oplayer/ui/screen/playlist/playlist.dart';
+import 'package:oplayer/ui/screen/playlist/test.dart';
 
 import 'const/colors.dart';
 
@@ -82,10 +83,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: PlaylistScreen.routeName,
+      initialRoute: MyAudioList.routeName,
       routes: {
         PlaylistScreen.routeName: (context) => PlaylistScreen(),
         DetailScreen.routeName: (context) => DetailScreen(),
+        MyAudioList.routeName: (context) => MyAudioList(),
       },
     );
   }
