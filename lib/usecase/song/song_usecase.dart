@@ -11,6 +11,7 @@ import 'package:path_provider_ex/path_provider_ex.dart';
 import 'package:id3/id3.dart';
 
 class SongUseCase {
+  StreamController<double>? _durationController;
   static AudioPlayer? audioPlayer;
 
   static final SongUseCase _instance = SongUseCase._internal();
@@ -53,6 +54,7 @@ class SongUseCase {
   }
 
   Future<int>? play(final String path) {
+    dispose();
     currentPath = path;
     return audioPlayer?.play(path, isLocal: true);
   }
@@ -70,18 +72,25 @@ class SongUseCase {
   }
 
   Future<int>? stop() {
+    dispose();
     return audioPlayer?.stop();
   }
 
+  void dispose() {
+    if (_durationController != null && !_durationController!.isClosed)
+      _durationController?.close();
+  }
+
   Stream<double> getPurcent() {
-    StreamController<double> controller = StreamController<double>();
-    Stream<double> stream = controller.stream;
+    if (_durationController == null || _durationController!.isClosed)
+      _durationController = StreamController();
+    Stream<double> stream = _durationController!.stream;
     audioPlayer?.onDurationChanged.listen(
       (totalDuration) {
         audioPlayer?.onAudioPositionChanged.listen(
           (currentDuration) {
-            controller
-                .add(currentDuration.inSeconds * 100 / totalDuration.inSeconds);
+            _durationController?.add(
+                currentDuration.inSeconds * 100 / totalDuration.inSeconds);
           },
         );
       },
