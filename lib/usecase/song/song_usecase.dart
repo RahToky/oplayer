@@ -1,53 +1,75 @@
 import 'dart:io';
 
+import 'package:audioplayers/audioplayers.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:oplayer/model/song/song_item.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:path_provider_ex/path_provider_ex.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:id3/id3.dart';
 
 class SongUseCase {
+  static AudioPlayer? audioPlayer;
 
-  Future<List<Song>> getSongs() async{
-    /*return Future.value([
-      Song(title: 'Turning page',singer: 'Corey Morton'),
-      Song(title: 'Bubbly',singer: 'Estelle Patterson'),
-      Song(title: 'All my days',singer: 'Chad Stokes'),
-      Song(title: 'Better together',singer: 'Kathryn '),
-      Song(title: 'Turning page',singer: 'Corey Morton'),
-      Song(title: 'Bubbly',singer: 'Estelle Patterson'),
-      Song(title: 'All my days',singer: 'Chad Stokes'),
-      Song(title: 'Better together',singer: 'Kathryn '),
-      Song(title: 'Turning page',singer: 'Corey Morton'),
-      Song(title: 'Bubbly',singer: 'Estelle Patterson'),
-      Song(title: 'All my days',singer: 'Chad Stokes'),
-      Song(title: 'Better together',singer: 'Kathryn '),
-      Song(title: 'Turning page',singer: 'Corey Morton'),
-      Song(title: 'Bubbly',singer: 'Estelle Patterson'),
-      Song(title: 'All my days',singer: 'Chad Stokes'),
-      Song(title: 'Better together',singer: 'Kathryn '),
-      Song(title: 'Turning page',singer: 'Corey Morton'),
-      Song(title: 'Bubbly',singer: 'Estelle Patterson'),
-      Song(title: 'All my days',singer: 'Chad Stokes'),
-      Song(title: 'Better together',singer: 'Kathryn '),
-    ]);*/
+  static final SongUseCase _instance = SongUseCase._internal();
 
-    print('get files ...');
-    var files;
-    List<Song> songs =[];
+  factory SongUseCase() {
+    if (audioPlayer == null) audioPlayer = AudioPlayer();
+    return _instance;
+  }
+
+  SongUseCase._internal();
+
+  Future<List<Song>> getSongs() async {
+    List<Song> songs = [];
     List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
-    var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
+    var root = storageInfo[0]
+        .rootDir; //storageInfo[1] for SD card, geting the root directory
     var fm = FileManager(root: Directory(root)); //
-    files = await fm.filesTree(
-        excludedPaths: ["/storage/emulated/0/Android"],
-        extensions: ["mp3"] //optional, to filter files, list only mp3 files
-    );
+    await fm.filesTree(
+      excludedPaths: ["/storage/emulated/0/Android"],
+      extensions: ["mp3"], //optional, to filter files, list only mp3 files
+    ).then((files) async {
+      for (File file in files) {
+        Song s = Song(
+          title: '${file.path.split('/').last.split('.').first}',
+          path: '${file.path}',
+        );
+        MP3Instance mp3instance =
+            new MP3Instance(File(file.path).readAsBytesSync());
+        if (mp3instance.parseTagsSync()) {
+          s.singer = mp3instance.getMetaTags()?['Artist'];
+          s.imgB64 = mp3instance.getMetaTags()?['APIC']['base64'];
+        }
+        songs.add(s);
+      }
+    });
 
-    print('files size = ${files.length}');
+    return songs;
+  }
 
-    for(File file in files){
-      print('file: ${file.path}');
-      songs.add(Song(title: '${file.path.split('/').last}',singer: 'unknown'));
-    }
+  Future<int>? play(final String path) {
+    return audioPlayer?.play(path, isLocal: true);
+  }
 
-    return Future.value(songs);
+  Future<int>? getDuration() {
+    return audioPlayer?.getDuration();
+  }
+
+  Future<int>? pause() {
+    return audioPlayer?.pause();
+  }
+
+  Future<int>? seek(Duration duration) {
+    return audioPlayer?.seek(duration);
+  }
+
+  Future<int>? resume() {
+    return audioPlayer?.resume();
+  }
+
+  Future<int>? stop() {
+    return audioPlayer?.stop();
   }
 }

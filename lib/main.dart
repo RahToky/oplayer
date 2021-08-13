@@ -4,11 +4,17 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
 import 'package:oplayer/ui/screen/playlist/playlist.dart';
 import 'package:oplayer/ui/screen/playlist/test.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:permission_handler/permission_handler.dart';
 
 import 'const/colors.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  var isGranted = await Permission.storage.request().isGranted;
+  while (!isGranted) {
+    isGranted = await Permission.storage.request().isGranted;
+  }
   runApp(MyApp());
 }
 
@@ -84,7 +90,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: MyAudioList.routeName,
+      initialRoute: PlaylistScreen.routeName,
       routes: {
         PlaylistScreen.routeName: (context) => PlaylistScreen(),
         DetailScreen.routeName: (context) => DetailScreen(),

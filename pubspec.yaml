@@ -29,6 +29,8 @@ dependencies:
   path_provider_ex: ^1.0.1
   flutter_file_manager: ^0.2.0
   permission_handler: ^5.0.1+1
+  floor: ^1.1.0
+  id3: ^1.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -38,6 +40,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  floor_generator: ^1.1.0
+  build_runner: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

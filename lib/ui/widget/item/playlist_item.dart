@@ -1,12 +1,12 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:oplayer/callback/pick_song_listener.dart';
 import 'package:oplayer/const/colors.dart';
 import 'package:oplayer/const/strings.dart';
 import 'package:oplayer/model/song/song_item.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
-
 import 'static_disk_circle.dart';
 
 class PlaylistItem extends StatefulWidget {
@@ -14,10 +14,12 @@ class PlaylistItem extends StatefulWidget {
   bool isPlaying;
   final Song? song;
   final Key? key;
+  final SongClickListener? songClickListener;
 
   PlaylistItem(
       {@required this.key,
       @required this.song,
+      @required this.songClickListener,
       this.isFavorite = false,
       this.isPlaying = false})
       : super(key: key);
@@ -35,6 +37,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
   Widget build(BuildContext context) {
     return Container(
       height: _itemHeight,
+      width: MediaQuery.of(context).size.width,
       alignment: Alignment.topCenter,
       padding: EdgeInsets.only(
         bottom: kTabLabelPadding.left * 1.2,
@@ -61,7 +64,12 @@ class _PlaylistItemState extends State<PlaylistItem> {
                 InkWell(
                   child: Hero(
                     tag: '${widget.key?.toString()}',
-                    child: const DiskImage(
+                    child: DiskImage(
+                      image: (widget.song?.imgB64 == null)
+                          ? null
+                          : Image.memory(
+                              Base64Decoder().convert(widget.song!.imgB64!),
+                            ),
                       borderColor: Colors.white,
                       borderWidth: 1,
                       centerBorderWidth: 0.5,
@@ -100,6 +108,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
                       ],
                     ),
                     onTap: () {
+                      _play();
                       _showDetailScreen();
                     },
                   ),
@@ -147,31 +156,12 @@ class _PlaylistItemState extends State<PlaylistItem> {
     });
   }
 
-
-  void _play() async {
-    if (!widget.isPlaying) {
-      AudioPlayer audioPlayer = AudioPlayer();
-      print('playing');
-      int result = await audioPlayer.play(
-          'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3');
-      if (result == 1)
-        setState(() {
-          widget.isPlaying = true;
-        });
-    }
-  }
-
-  void _stop() {
-    if (widget.isPlaying) {
-      setState(() {
-        widget.isPlaying = false;
-      });
-    }
-  }
-
   void _showDetailScreen() {
-    Navigator.pushNamed(context, DetailScreen.routeName,
-        arguments: {'key': widget.key, 'song': widget.song});
+    Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
+      'key': widget.key,
+      'song': widget.song,
+      'listener': widget.songClickListener
+    });
   }
 
   NeumorphicButton _buildPlayButton() {
@@ -201,5 +191,19 @@ class _PlaylistItemState extends State<PlaylistItem> {
             },
             child: const Icon(Icons.play_arrow_outlined),
           );
+  }
+
+  void _play() {
+    setState(() {
+      widget.isPlaying = true;
+      widget.songClickListener?.onSongPlay(widget.song!);
+    });
+  }
+
+  void _stop() {
+    setState(() {
+      widget.isPlaying = false;
+      widget.songClickListener?.onSongStop(widget.song!);
+    });
   }
 }

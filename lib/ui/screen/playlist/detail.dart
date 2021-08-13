@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:oplayer/callback/pick_song_listener.dart';
 import 'package:oplayer/const/colors.dart';
-import 'package:oplayer/main.dart';
 import 'package:oplayer/model/song/song_item.dart';
 import 'package:oplayer/ui/widget/appbar/appbar.dart';
 import 'package:oplayer/ui/widget/item/animate_disk_circle.dart';
 import 'package:oplayer/ui/widget/item/static_disk_circle.dart';
+import 'package:oplayer/usecase/song/song_usecase.dart';
 
 class DetailScreen extends StatefulWidget {
   static final String routeName = "/detail";
@@ -19,6 +20,8 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   Song? song;
   Key? key;
+  SongClickListener? songClickListener;
+  final SongUseCase _songUseCase = SongUseCase();
 
   final double _iconControlSize = kToolbarHeight * 1.3;
 
@@ -26,11 +29,9 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
-    key = arguments['key'];
-    song = arguments['song'];
+    _getArguments(context);
     final double _centerDiskSize = MediaQuery.of(context).size.width * 0.12;
-
+    _getDuration();
     return Scaffold(
       appBar: MyAppBar(),
       body: Container(
@@ -42,6 +43,7 @@ class _DetailScreenState extends State<DetailScreen> {
               child: Hero(
                 tag: '${key?.toString()}',
                 child: AnimatedDiskImage(
+                  run: isPlaying,
                   diskImage: DiskImage(
                     borderColor: Colors.white,
                     borderWidth: 1,
@@ -56,6 +58,9 @@ class _DetailScreenState extends State<DetailScreen> {
             Expanded(
               flex: 2,
               child: Container(
+                padding: EdgeInsets.only(
+                    left: kTabLabelPadding.left, right: kTabLabelPadding.left),
+                alignment: Alignment.center,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -65,6 +70,9 @@ class _DetailScreenState extends State<DetailScreen> {
                       child: Text(
                         '${song?.title}',
                         style: Theme.of(context).textTheme.headline1,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     SizedBox(height: 10),
@@ -103,6 +111,19 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
       ),
     );
+  }
+
+  void _getDuration() async {
+    int? duration = await _songUseCase.getDuration();
+    print('duration = $duration');
+  }
+
+  // get args
+  void _getArguments(context) {
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    key = arguments['key'];
+    song = arguments['song'];
+    songClickListener = arguments['listener'];
   }
 
   Container _buildProgress(double percent) {
@@ -148,7 +169,7 @@ class _DetailScreenState extends State<DetailScreen> {
             if (isPlaying)
               _pause();
             else
-              _play();
+              _resume();
           },
           child: NeumorphicIcon(
             (isPlaying) ? Icons.pause_rounded : Icons.play_arrow_rounded,
@@ -194,15 +215,17 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  void _play() {
+  void _resume() {
     setState(() {
       isPlaying = true;
+      songClickListener?.onSongResume(song!);
     });
   }
 
   void _pause() {
     setState(() {
       isPlaying = false;
+      songClickListener?.onSongPause(song!);
     });
   }
 }
