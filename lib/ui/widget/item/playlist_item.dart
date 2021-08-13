@@ -7,6 +7,7 @@ import 'package:oplayer/const/colors.dart';
 import 'package:oplayer/const/strings.dart';
 import 'package:oplayer/model/song/song_item.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
+import 'package:oplayer/usecase/song/song_usecase.dart';
 import 'static_disk_circle.dart';
 
 class PlaylistItem extends StatefulWidget {
@@ -32,6 +33,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
   final double _itemHeight = kToolbarHeight * 1.6;
   final double _iconHeight = kToolbarHeight * 0.3;
   final double _iconSpacing = kToolbarHeight * 0.3;
+  final SongUseCase _songUseCase = SongUseCase();
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +118,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
                 Container(
                   child: Row(
                     children: [
+                      SizedBox(width: _iconSpacing),
                       GestureDetector(
                         onTap: () {
                           _setAsFavorite();
@@ -128,7 +131,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
                         ),
                       ),
                       SizedBox(width: _iconSpacing),
-                      GestureDetector(
+                      /*GestureDetector(
                         onTap: () {
                           print('more');
                         },
@@ -137,7 +140,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
                           size: _iconHeight,
                         ),
                       ),
-                      SizedBox(width: _iconSpacing),
+                      SizedBox(width: _iconSpacing),*/
                       _buildPlayButton(),
                     ],
                   ),
@@ -193,10 +196,13 @@ class _PlaylistItemState extends State<PlaylistItem> {
           );
   }
 
-  void _play() {
+  void _play() async {
     setState(() {
       widget.isPlaying = true;
       widget.songClickListener?.onSongPlay(widget.song!);
+    });
+    _songUseCase.getPurcent().listen((percent) {
+      print('purcent $percent%');
     });
   }
 

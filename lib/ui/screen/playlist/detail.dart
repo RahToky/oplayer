@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/callback/pick_song_listener.dart';
@@ -31,7 +33,6 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     _getArguments(context);
     final double _centerDiskSize = MediaQuery.of(context).size.width * 0.12;
-    _getDuration();
     return Scaffold(
       appBar: MyAppBar(),
       body: Container(
@@ -42,16 +43,18 @@ class _DetailScreenState extends State<DetailScreen> {
               flex: 5,
               child: Hero(
                 tag: '${key?.toString()}',
-                child: AnimatedDiskImage(
-                  run: isPlaying,
-                  diskImage: DiskImage(
-                    borderColor: Colors.white,
-                    borderWidth: 1,
-                    centerBorderWidth: 0.0,
-                    centerBorderColor: Colors.white,
-                    centerWidth: _centerDiskSize,
-                    centerColor: MyColors.baseColor,
-                  ),
+                child: DiskImage(
+                  image: (song?.imgB64 == null)
+                      ? null
+                      : Image.memory(
+                          Base64Decoder().convert(song!.imgB64!),
+                        ),
+                  borderColor: Colors.white,
+                  borderWidth: 1,
+                  centerBorderWidth: 0.0,
+                  centerBorderColor: Colors.white,
+                  centerWidth: _centerDiskSize,
+                  centerColor: MyColors.baseColor,
                 ),
               ),
             ),
@@ -111,11 +114,6 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
       ),
     );
-  }
-
-  void _getDuration() async {
-    int? duration = await _songUseCase.getDuration();
-    print('duration = $duration');
   }
 
   // get args

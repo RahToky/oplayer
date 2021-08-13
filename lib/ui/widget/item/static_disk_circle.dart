@@ -41,7 +41,7 @@ class DiskImage extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width,
-              color: Colors.red,
+              color: Colors.black,
               child: FittedBox(
                 fit: BoxFit.fitHeight,
                 child:

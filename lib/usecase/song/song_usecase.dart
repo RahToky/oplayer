@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -13,6 +14,8 @@ class SongUseCase {
   static AudioPlayer? audioPlayer;
 
   static final SongUseCase _instance = SongUseCase._internal();
+
+  static String? currentPath;
 
   factory SongUseCase() {
     if (audioPlayer == null) audioPlayer = AudioPlayer();
@@ -50,11 +53,8 @@ class SongUseCase {
   }
 
   Future<int>? play(final String path) {
+    currentPath = path;
     return audioPlayer?.play(path, isLocal: true);
-  }
-
-  Future<int>? getDuration() {
-    return audioPlayer?.getDuration();
   }
 
   Future<int>? pause() {
@@ -71,5 +71,21 @@ class SongUseCase {
 
   Future<int>? stop() {
     return audioPlayer?.stop();
+  }
+
+  Stream<double> getPurcent() {
+    StreamController<double> controller = StreamController<double>();
+    Stream<double> stream = controller.stream;
+    audioPlayer?.onDurationChanged.listen(
+      (totalDuration) {
+        audioPlayer?.onAudioPositionChanged.listen(
+          (currentDuration) {
+            controller
+                .add(currentDuration.inSeconds * 100 / totalDuration.inSeconds);
+          },
+        );
+      },
+    );
+    return stream;
   }
 }
