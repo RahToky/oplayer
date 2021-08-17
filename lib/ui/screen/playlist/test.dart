@@ -23,17 +23,17 @@ class _MyAudioList extends State<MyAudioList> {
   var files;
 
   void getFiles() async {
-    //asyn function to get list of files
+    //async function to get list of files
     if (await Permission.storage.request().isGranted) {
       List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
       var root = storageInfo[0]
-          .rootDir; //storageInfo[1] for SD card, geting the root directory
+          .rootDir; //storageInfo[1] for SD card, getting the root directory
       var fm = FileManager(root: Directory(root)); //
       files = await fm.filesTree(
           excludedPaths: ["/storage/emulated/0/Android"],
           extensions: ["mp3"] //optional, to filter files, list only mp3 files
           );
-      setState(() {}); //update the UI
+      setState(() {});
     }
   }
 

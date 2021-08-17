@@ -5,7 +5,7 @@ import 'package:oplayer/callback/pick_song_listener.dart';
 import 'package:oplayer/model/song/song_item.dart';
 import 'package:oplayer/ui/widget/appbar/appbar.dart';
 import 'package:oplayer/ui/widget/item/playlist_item.dart';
-import 'package:oplayer/usecase/song/song_usecase.dart';
+import 'package:oplayer/usecase/song/local_song_usecase.dart';
 
 class PlaylistScreen extends StatefulWidget {
   static final String routeName = "/playlist";
@@ -20,9 +20,9 @@ class PlaylistScreen extends StatefulWidget {
 }
 
 class _PlaylistScreenState extends State<PlaylistScreen>
-    implements SongClickListener {
+/*implements SongClickListener*/ {
   final SongUseCase _audioUseCase = SongUseCase();
-  Song? _currentSong;
+  //Song? _currentSong;
   Future<List<Song>>? _futureSongs;
 
   void _fetchSongs() {
@@ -80,10 +80,8 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                         itemCount: songs.length,
                         itemBuilder: (context, index) {
                           return PlaylistItem(
-                            key: Key('$index'),
+                            key: Key('${songs[index].path}'),
                             song: songs[index],
-                            isPlaying: _currentSong?.path == songs[index].path,
-                            songClickListener: this,
                           );
                         },
                       );
@@ -105,10 +103,10 @@ class _PlaylistScreenState extends State<PlaylistScreen>
     );
   }
 
+/*
   @override
   void onSongPause(Song song) {
     setState(() {
-      _audioUseCase.pause();
     });
   }
 
@@ -133,5 +131,5 @@ class _PlaylistScreenState extends State<PlaylistScreen>
     setState(() {
       _audioUseCase.stop();
     });
-  }
+  }*/
 }

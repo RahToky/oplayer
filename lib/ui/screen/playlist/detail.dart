@@ -8,7 +8,8 @@ import 'package:oplayer/model/song/song_item.dart';
 import 'package:oplayer/ui/widget/appbar/appbar.dart';
 import 'package:oplayer/ui/widget/item/animate_disk_circle.dart';
 import 'package:oplayer/ui/widget/item/static_disk_circle.dart';
-import 'package:oplayer/usecase/song/song_usecase.dart';
+import 'package:oplayer/usecase/control/song_control_usecase.dart';
+import 'package:oplayer/usecase/song/local_song_usecase.dart';
 
 class DetailScreen extends StatefulWidget {
   static final String routeName = "/detail";
@@ -22,12 +23,9 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   Song? song;
   Key? key;
-  SongClickListener? songClickListener;
-  final SongUseCase _songUseCase = SongUseCase();
-
-  final double _iconControlSize = kToolbarHeight * 1.3;
-
   bool isPlaying = true;
+  final double _iconControlSize = kToolbarHeight * 1.3;
+  final SongControlUseCase _songControlUseCase = SongControlUseCase();
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +119,6 @@ class _DetailScreenState extends State<DetailScreen> {
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     key = arguments['key'];
     song = arguments['song'];
-    songClickListener = arguments['listener'];
   }
 
   Container _buildProgress(double percent) {
@@ -216,14 +213,14 @@ class _DetailScreenState extends State<DetailScreen> {
   void _resume() {
     setState(() {
       isPlaying = true;
-      songClickListener?.onSongResume(song!);
+      _songControlUseCase.resume();
     });
   }
 
   void _pause() {
     setState(() {
       isPlaying = false;
-      songClickListener?.onSongPause(song!);
+      _songControlUseCase.pause();
     });
   }
 }

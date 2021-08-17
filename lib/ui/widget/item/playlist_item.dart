@@ -7,33 +7,47 @@ import 'package:oplayer/const/colors.dart';
 import 'package:oplayer/const/strings.dart';
 import 'package:oplayer/model/song/song_item.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
-import 'package:oplayer/usecase/song/song_usecase.dart';
+import 'package:oplayer/ui/widget/button/play_pause_button.dart';
+import 'package:oplayer/usecase/control/song_control_usecase.dart';
+import 'package:oplayer/usecase/song/local_song_usecase.dart';
 import 'static_disk_circle.dart';
 
 class PlaylistItem extends StatefulWidget {
-  bool isFavorite;
-  bool isPlaying;
+  final bool isFavorite;
   final Song? song;
   final Key? key;
-  final SongClickListener? songClickListener;
 
   PlaylistItem(
-      {@required this.key,
-      @required this.song,
-      @required this.songClickListener,
-      this.isFavorite = false,
-      this.isPlaying = false})
+      {@required this.key, @required this.song, this.isFavorite = false})
       : super(key: key);
 
   @override
   _PlaylistItemState createState() => _PlaylistItemState();
 }
 
-class _PlaylistItemState extends State<PlaylistItem> {
+class _PlaylistItemState extends State<PlaylistItem>
+    implements SongClickListener {
   final double _itemHeight = kToolbarHeight * 1.6;
   final double _iconHeight = kToolbarHeight * 0.3;
   final double _iconSpacing = kToolbarHeight * 0.3;
-  final SongUseCase _songUseCase = SongUseCase();
+  late final SongControlUseCase _songControlUseCase;
+  late bool _isFavorite;
+  bool _isPlaying = false;
+
+  @override
+  void initState() {
+    _songControlUseCase = SongControlUseCase();
+    _isFavorite = widget.isFavorite;
+    _observeDuration();
+    _observeCurrPath();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _songControlUseCase.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +68,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
           Container(
             height: 2,
             child: LinearProgressIndicator(
-              value: (widget.isPlaying) ? 0.4 : 0,
+              value: (_isPlaying) ? 0.4 : 0,
               backgroundColor: MyColors.progressBgColor,
               valueColor: AlwaysStoppedAnimation<Color>(MyColors.progressColor),
             ),
@@ -124,7 +138,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
                           _setAsFavorite();
                         },
                         child: Icon(
-                          (widget.isFavorite)
+                          (_isFavorite)
                               ? Icons.favorite
                               : Icons.favorite_border,
                           size: _iconHeight,
@@ -141,7 +155,7 @@ class _PlaylistItemState extends State<PlaylistItem> {
                         ),
                       ),
                       SizedBox(width: _iconSpacing),*/
-                      _buildPlayButton(),
+                      PlayPauseButton(key: widget.key, songClickListener: this),
                     ],
                   ),
                 ),
@@ -153,9 +167,21 @@ class _PlaylistItemState extends State<PlaylistItem> {
     );
   }
 
+  void _observeDuration() {
+    /*_songControlUseCase.currentDurationStream?.listen((percent) {
+      //print('purcent $percent%');
+    });*/
+  }
+
+  void _observeCurrPath() {
+    _songControlUseCase.currentSongPathStream?.listen((event) {
+      print('play ==== $event');
+    });
+  }
+
   void _setAsFavorite() {
     setState(() {
-      widget.isFavorite = !widget.isFavorite;
+      _isFavorite = !_isFavorite;
     });
   }
 
@@ -163,53 +189,26 @@ class _PlaylistItemState extends State<PlaylistItem> {
     Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
       'key': widget.key,
       'song': widget.song,
-      'listener': widget.songClickListener
     });
-  }
-
-  NeumorphicButton _buildPlayButton() {
-    return (widget.isPlaying)
-        ? NeumorphicButton(
-            padding: const EdgeInsets.all(5.0),
-            onPressed: () {
-              _stop();
-            },
-            child: Icon(
-              Icons.pause_rounded,
-              color: MyColors.progressColor,
-            ),
-            style: NeumorphicStyle(
-              shape: NeumorphicShape.concave,
-              boxShape:
-                  NeumorphicBoxShape.roundRect(BorderRadius.circular(10.0)),
-              depth: 5,
-              shadowLightColor: Colors.white70,
-              intensity: 0.3,
-            ),
-          )
-        : NeumorphicButton(
-            padding: const EdgeInsets.all(5.0),
-            onPressed: () {
-              _play();
-            },
-            child: const Icon(Icons.play_arrow_outlined),
-          );
   }
 
   void _play() async {
-    setState(() {
-      widget.isPlaying = true;
-      widget.songClickListener?.onSongPlay(widget.song!);
-    });
-    _songUseCase.getPurcent().listen((percent) {
-      print('purcent $percent%');
-    });
+    await _songControlUseCase.play(widget.song!.path!);
   }
 
   void _stop() {
-    setState(() {
-      widget.isPlaying = false;
-      widget.songClickListener?.onSongStop(widget.song!);
-    });
+    _songControlUseCase.stop();
   }
+
+  @override
+  void onSongPause(Song? song) {}
+
+  @override
+  void onSongPlay(Song? song) => _play();
+
+  @override
+  void onSongResume(Song? song) {}
+
+  @override
+  void onSongStop(Song? song) => _stop();
 }

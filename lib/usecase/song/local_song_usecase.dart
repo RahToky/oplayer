@@ -5,26 +5,23 @@ import 'package:audioplayers/audioplayers.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:oplayer/model/song/song_item.dart';
+import 'package:oplayer/usecase/song/isong_usecase.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:path_provider_ex/path_provider_ex.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:id3/id3.dart';
 
-class SongUseCase {
-  StreamController<double>? _durationController;
-  static AudioPlayer? audioPlayer;
+class SongUseCase implements ISongUseCase{
 
   static final SongUseCase _instance = SongUseCase._internal();
 
-  static String? currentPath;
+  SongUseCase._internal();
 
   factory SongUseCase() {
-    if (audioPlayer == null) audioPlayer = AudioPlayer();
     return _instance;
   }
 
-  SongUseCase._internal();
-
+  @override
   Future<List<Song>> getSongs() async {
     List<Song> songs = [];
     List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
@@ -49,52 +46,8 @@ class SongUseCase {
         songs.add(s);
       }
     });
-
     return songs;
   }
 
-  Future<int>? play(final String path) {
-    dispose();
-    currentPath = path;
-    return audioPlayer?.play(path, isLocal: true);
-  }
 
-  Future<int>? pause() {
-    return audioPlayer?.pause();
-  }
-
-  Future<int>? seek(Duration duration) {
-    return audioPlayer?.seek(duration);
-  }
-
-  Future<int>? resume() {
-    return audioPlayer?.resume();
-  }
-
-  Future<int>? stop() {
-    dispose();
-    return audioPlayer?.stop();
-  }
-
-  void dispose() {
-    if (_durationController != null && !_durationController!.isClosed)
-      _durationController?.close();
-  }
-
-  Stream<double> getPurcent() {
-    if (_durationController == null || _durationController!.isClosed)
-      _durationController = StreamController();
-    Stream<double> stream = _durationController!.stream;
-    audioPlayer?.onDurationChanged.listen(
-      (totalDuration) {
-        audioPlayer?.onAudioPositionChanged.listen(
-          (currentDuration) {
-            _durationController?.add(
-                currentDuration.inSeconds * 100 / totalDuration.inSeconds);
-          },
-        );
-      },
-    );
-    return stream;
-  }
 }
