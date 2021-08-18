@@ -80,8 +80,9 @@ class SongControlUseCase {
         audioPlayer?.onAudioPositionChanged.listen(
           (currentDuration) {
             _initStreamsIfNullOrClosed(); //assurer l'initialisation
-            _durationController
-                .add(currentDuration.inSeconds * 100 / totalDuration.inSeconds);
+            _durationController.add(double.parse(
+                (currentDuration.inSeconds / totalDuration.inSeconds)
+                    .toStringAsFixed(2)));
           },
         );
       },

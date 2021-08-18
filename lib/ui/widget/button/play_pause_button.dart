@@ -75,8 +75,6 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
 
   void _observeCurrPath() {
     _songControlUseCase.currentSongPathStream?.listen((event) {
-      print('--- event = $event');
-      print('--- key = ${widget.key.toString()}');
       if (widget.key != Key(event) && _isPlaying) {
         _stop();
       } else if (widget.key == Key(event) && !_isPlaying) {
@@ -91,18 +89,3 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
     super.dispose();
   }
 }
-
-/*
-class PlayPauseStateController {
-  static _PlayPauseButtonState? _currentButtonClicked;
-
-  static void setButtonPlay(_PlayPauseButtonState button) {
-    if (_currentButtonClicked != null &&
-        _currentButtonClicked!.widget.key != button.widget.key) {
-      _currentButtonClicked?._changeState();
-      _currentButtonClicked = button;
-    } else if (_currentButtonClicked == null ||
-        _currentButtonClicked!.widget.key != button.widget.key)
-      _currentButtonClicked = button;
-  }
-}*/

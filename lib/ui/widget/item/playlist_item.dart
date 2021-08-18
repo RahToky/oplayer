@@ -8,6 +8,7 @@ import 'package:oplayer/const/strings.dart';
 import 'package:oplayer/model/song/song_item.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
 import 'package:oplayer/ui/widget/button/play_pause_button.dart';
+import 'package:oplayer/ui/widget/progress/simple_progress.dart';
 import 'package:oplayer/usecase/control/song_control_usecase.dart';
 import 'package:oplayer/usecase/song/local_song_usecase.dart';
 import 'static_disk_circle.dart';
@@ -66,11 +67,7 @@ class _PlaylistItemState extends State<PlaylistItem>
         children: [
           Container(
             height: 2,
-            child: LinearProgressIndicator(
-              value: (_isPlaying) ? 0.4 : 0,
-              backgroundColor: MyColors.progressBgColor,
-              valueColor: AlwaysStoppedAnimation<Color>(MyColors.progressColor),
-            ),
+            child: SongProgress(),
           ),
           SizedBox(height: kTabLabelPadding.left * 0.9),
           Expanded(
@@ -167,9 +164,9 @@ class _PlaylistItemState extends State<PlaylistItem>
   }
 
   void _observeDuration() {
-    _songControlUseCase.currentDurationStream?.listen((percent) {
+    /*_songControlUseCase.currentDurationStream?.listen((percent) {
       print('purcent $percent%');
-    });
+    });*/
   }
 
   void _setAsFavorite() {

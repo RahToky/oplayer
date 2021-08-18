@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
 import 'package:oplayer/ui/screen/playlist/playlist.dart';
-import 'package:oplayer/ui/screen/playlist/test.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:permission_handler/permission_handler.dart';
 
@@ -94,7 +93,6 @@ class MyApp extends StatelessWidget {
       routes: {
         PlaylistScreen.routeName: (context) => PlaylistScreen(),
         DetailScreen.routeName: (context) => DetailScreen(),
-        MyAudioList.routeName: (context) => MyAudioList(),
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/callback/pick_song_listener.dart';
@@ -19,10 +20,8 @@ class PlaylistScreen extends StatefulWidget {
   _PlaylistScreenState createState() => _PlaylistScreenState();
 }
 
-class _PlaylistScreenState extends State<PlaylistScreen>
-/*implements SongClickListener*/ {
+class _PlaylistScreenState extends State<PlaylistScreen> {
   final SongUseCase _audioUseCase = SongUseCase();
-  //Song? _currentSong;
   Future<List<Song>>? _futureSongs;
 
   void _fetchSongs() {
@@ -31,8 +30,8 @@ class _PlaylistScreenState extends State<PlaylistScreen>
 
   @override
   void initState() {
-    _fetchSongs();
     super.initState();
+    _fetchSongs();
   }
 
   @override
@@ -85,14 +84,14 @@ class _PlaylistScreenState extends State<PlaylistScreen>
                           );
                         },
                       );
-                    }
-                    return Column(
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 20.0),
-                        Text('recherche...'),
-                      ],
-                    );
+                    } else
+                      return Column(
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 20.0),
+                          Text('recherche...'),
+                        ],
+                      );
                   },
                 ),
               ),
@@ -102,34 +101,4 @@ class _PlaylistScreenState extends State<PlaylistScreen>
       ),
     );
   }
-
-/*
-  @override
-  void onSongPause(Song song) {
-    setState(() {
-    });
-  }
-
-  @override
-  void onSongPlay(Song song) {
-    print('playing ${song.title}');
-    _currentSong = song;
-    setState(() {
-      _audioUseCase.play(song.path!);
-    });
-  }
-
-  @override
-  void onSongResume(Song song) {
-    _audioUseCase.resume();
-  }
-
-  @override
-  void onSongStop(Song song) {
-    print('stoping ${song.title}');
-    _currentSong = null;
-    setState(() {
-      _audioUseCase.stop();
-    });
-  }*/
 }
