@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/const/colors.dart';
-import 'package:oplayer/usecase/control/song_control_usecase.dart';
+import 'package:oplayer/usecase/control/song_controller.dart';
 
 class SongNeuProgressBar extends StatefulWidget {
   const SongNeuProgressBar({Key? key}) : super(key: key);
@@ -11,12 +11,12 @@ class SongNeuProgressBar extends StatefulWidget {
 }
 
 class _SongNeuProgressBarState extends State<SongNeuProgressBar> {
-  late final SongControlUseCase _songControlUseCase;
+  late final SongController _songControlUseCase;
   double _percent = 0.0;
 
   @override
   void initState() {
-    _songControlUseCase = SongControlUseCase();
+    _songControlUseCase = SongController();
     _observeDuration();
     super.initState();
   }

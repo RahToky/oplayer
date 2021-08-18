@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/callback/pick_song_listener.dart';
 import 'package:oplayer/const/strings.dart';
-import 'package:oplayer/data/model/song_item.dart';
+import 'package:oplayer/data/model/song.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
 import 'package:oplayer/ui/widget/button/play_pause_button.dart';
 import 'package:oplayer/ui/widget/progress/simple_progress.dart';
-import 'package:oplayer/usecase/control/song_control_usecase.dart';
-import 'static_disk_circle.dart';
+import 'package:oplayer/usecase/control/song_controller.dart';
+import 'disk_circle.dart';
 
 class PlaylistItem extends StatefulWidget {
   final bool isFavorite;
@@ -29,13 +29,13 @@ class _PlaylistItemState extends State<PlaylistItem>
   final double _itemHeight = kToolbarHeight * 1.6;
   final double _iconHeight = kToolbarHeight * 0.3;
   final double _iconSpacing = kToolbarHeight * 0.3;
-  late final SongControlUseCase _songControlUseCase;
+  late final SongController _songControlUseCase;
   late bool _isFavorite;
   bool _isPlaying = false;
 
   @override
   void initState() {
-    _songControlUseCase = SongControlUseCase();
+    _songControlUseCase = SongController();
     _isFavorite = widget.isFavorite;
     _observeDuration();
     super.initState();

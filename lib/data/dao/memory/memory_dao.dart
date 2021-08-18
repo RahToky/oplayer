@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:id3/id3.dart';
-import 'package:oplayer/data/model/song_item.dart';
+import 'package:oplayer/data/model/song.dart';
 import 'package:path_provider_ex/path_provider_ex.dart';
 
 class MemoryDao {

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:oplayer/ui/widget/item/static_disk_circle.dart';
+import 'package:oplayer/ui/widget/item/disk_circle.dart';
 
 class AnimatedDiskImage extends StatefulWidget {
   final DiskImage? diskImage;
@@ -11,7 +11,6 @@ class AnimatedDiskImage extends StatefulWidget {
 
   @override
   _AnimatedDiskImageState createState() => _AnimatedDiskImageState();
-
 }
 
 class _AnimatedDiskImageState extends State<AnimatedDiskImage> {

@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 
-class SongControlUseCase {
+class SongController {
   static AudioPlayer? audioPlayer;
-  static final SongControlUseCase _instance = SongControlUseCase._private();
+  static final SongController _instance = SongController._private();
   static StreamController<double> _durationController = StreamController();
   static StreamController<String> _currPathController = StreamController();
   Stream<double>? currentDurationStream =
@@ -12,9 +12,9 @@ class SongControlUseCase {
   Stream<String>? currentSongPathStream =
       _currPathController.stream.asBroadcastStream();
 
-  SongControlUseCase._private();
+  SongController._private();
 
-  factory SongControlUseCase() {
+  factory SongController() {
     if (audioPlayer == null) audioPlayer = AudioPlayer();
     _instance._initStreamsIfNullOrClosed();
     return _instance;

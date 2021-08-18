@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/callback/pick_song_listener.dart';
 import 'package:oplayer/const/colors.dart';
-import 'package:oplayer/usecase/control/song_control_usecase.dart';
+import 'package:oplayer/usecase/control/song_controller.dart';
 
 class PlayPauseButton extends StatefulWidget {
   final SongClickListener? songClickListener;
@@ -19,7 +19,7 @@ class PlayPauseButton extends StatefulWidget {
 class _PlayPauseButtonState extends State<PlayPauseButton> {
   bool _isPlaying = false;
 
-  final SongControlUseCase _songControlUseCase = SongControlUseCase();
+  final SongController _songControlUseCase = SongController();
 
   @override
   void initState() {

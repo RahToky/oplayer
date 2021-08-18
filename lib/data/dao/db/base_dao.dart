@@ -2,7 +2,7 @@ import 'package:oplayer/data/model/entity.dart';
 import 'package:sqflite/sqflite.dart';
 import 'app_db_helper.dart';
 
-class BaseDao {
+class BaseDao<T extends Entity> {
   final DatabaseHelper databaseHelper = DatabaseHelper.instance;
 
   Future<int> insert(String tableName, Map<String, dynamic> row) async {
@@ -10,7 +10,13 @@ class BaseDao {
     return await db.insert(tableName, row);
   }
 
-  Future<List<T>> findAll<T extends Entity>(T entity, String tableName) async {
+  Future<void> insertAll(
+      String tableName, List<Map<String, dynamic>> rows) async {
+    final Database db = await databaseHelper.database;
+    rows.map((row) => db.insert(tableName, row));
+  }
+
+  Future<List<T>> findAll(T entity, String tableName) async {
     final Database db = await databaseHelper.database;
     List<Map<String, dynamic>> mapList =
         await db.query(tableName, columns: ["*"], orderBy: "id ASC");
@@ -19,8 +25,7 @@ class BaseDao {
     });
   }
 
-  Future<T> findById<T extends Entity>(
-      T entity, int id, String tableName) async {
+  Future<T> findById(T entity, int id, String tableName) async {
     final Database db = await databaseHelper.database;
     var result = await db.query(tableName, where: "id = ", whereArgs: [id]);
     return result.isNotEmpty ? entity.fromMap(result.first) : Null;

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/callback/pick_song_listener.dart';
 import 'package:oplayer/const/colors.dart';
-import 'package:oplayer/data/model/song_item.dart';
+import 'package:oplayer/data/model/song.dart';
 import 'package:oplayer/ui/widget/appbar/appbar.dart';
 import 'package:oplayer/ui/widget/button/controls_button.dart';
-import 'package:oplayer/ui/widget/item/animate_disk_circle.dart';
-import 'package:oplayer/ui/widget/item/static_disk_circle.dart';
+import 'package:oplayer/ui/widget/item/disk_circle_anim.dart';
+import 'package:oplayer/ui/widget/item/disk_circle.dart';
 import 'package:oplayer/ui/widget/progress/neumorphic_progress.dart';
-import 'package:oplayer/usecase/control/song_control_usecase.dart';
+import 'package:oplayer/usecase/control/song_controller.dart';
 import 'package:oplayer/usecase/song/local_song_usecase.dart';
 
 class DetailScreen extends StatefulWidget {

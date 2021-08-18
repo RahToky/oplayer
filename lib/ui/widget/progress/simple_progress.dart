@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:oplayer/const/colors.dart';
-import 'package:oplayer/usecase/control/song_control_usecase.dart';
+import 'package:oplayer/usecase/control/song_controller.dart';
 
 class SongProgress extends StatefulWidget {
   const SongProgress({Key? key}) : super(key: key);
@@ -10,12 +10,12 @@ class SongProgress extends StatefulWidget {
 }
 
 class _SongProgressState extends State<SongProgress> {
-  late final SongControlUseCase _songControlUseCase;
+  late final SongController _songControlUseCase;
   double _percent = 0.0;
 
   @override
   void initState() {
-    _songControlUseCase = SongControlUseCase();
+    _songControlUseCase = SongController();
     _observeDuration();
     super.initState();
   }
