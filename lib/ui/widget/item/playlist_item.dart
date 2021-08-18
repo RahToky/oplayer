@@ -39,7 +39,6 @@ class _PlaylistItemState extends State<PlaylistItem>
     _songControlUseCase = SongControlUseCase();
     _isFavorite = widget.isFavorite;
     _observeDuration();
-    _observeCurrPath();
     super.initState();
   }
 
@@ -168,14 +167,8 @@ class _PlaylistItemState extends State<PlaylistItem>
   }
 
   void _observeDuration() {
-    /*_songControlUseCase.currentDurationStream?.listen((percent) {
-      //print('purcent $percent%');
-    });*/
-  }
-
-  void _observeCurrPath() {
-    _songControlUseCase.currentSongPathStream?.listen((event) {
-      print('play ==== $event');
+    _songControlUseCase.currentDurationStream?.listen((percent) {
+      print('purcent $percent%');
     });
   }
 

@@ -23,6 +23,7 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
 
   @override
   void initState() {
+    _observeCurrPath();
     super.initState();
   }
 
@@ -33,7 +34,7 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
             padding: const EdgeInsets.all(5.0),
             onPressed: () {
               widget.songClickListener?.onSongStop(null);
-              _changeState();
+              _stop();
             },
             child: Icon(
               Icons.pause_rounded,
@@ -52,20 +53,46 @@ class _PlayPauseButtonState extends State<PlayPauseButton> {
             padding: const EdgeInsets.all(5.0),
             onPressed: () {
               widget.songClickListener?.onSongPlay(null);
-              //PlayPauseStateController.setButtonPlay(this);
-              _changeState();
+              _play();
             },
             child: const Icon(Icons.play_arrow_outlined),
           );
   }
 
-  void _changeState() {
-    setState(() {
-      _isPlaying = !_isPlaying;
+  void _play() {
+    if (!_isPlaying)
+      setState(() {
+        _isPlaying = true;
+      });
+  }
+
+  void _stop() {
+    if (_isPlaying)
+      setState(() {
+        _isPlaying = false;
+      });
+  }
+
+  void _observeCurrPath() {
+    _songControlUseCase.currentSongPathStream?.listen((event) {
+      print('--- event = $event');
+      print('--- key = ${widget.key.toString()}');
+      if (widget.key != Key(event) && _isPlaying) {
+        _stop();
+      } else if (widget.key == Key(event) && !_isPlaying) {
+        _play();
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    _songControlUseCase.dispose();
+    super.dispose();
   }
 }
 
+/*
 class PlayPauseStateController {
   static _PlayPauseButtonState? _currentButtonClicked;
 
@@ -78,4 +105,4 @@ class PlayPauseStateController {
         _currentButtonClicked!.widget.key != button.widget.key)
       _currentButtonClicked = button;
   }
-}
+}*/
