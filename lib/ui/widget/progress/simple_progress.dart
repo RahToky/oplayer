@@ -30,11 +30,15 @@ class _SongProgressState extends State<SongProgress> {
   }
 
   void _observeDuration() {
-    _songControlUseCase.currentDurationStream?.listen((percent) {
-      if (_percent != percent)
-        setState(() {
-          _percent = percent;
+    _songControlUseCase.currentSongPathStream?.listen((path) {
+      if (Key(path) == widget.key) {
+        _songControlUseCase.currentDurationStream?.listen((percent) {
+          if (_percent != percent)
+            setState(() {
+              _percent = percent;
+            });
         });
+      }
     });
   }
 }

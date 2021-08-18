@@ -3,14 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/callback/pick_song_listener.dart';
-import 'package:oplayer/const/colors.dart';
 import 'package:oplayer/const/strings.dart';
-import 'package:oplayer/model/song/song_item.dart';
+import 'package:oplayer/data/model/song_item.dart';
 import 'package:oplayer/ui/screen/playlist/detail.dart';
 import 'package:oplayer/ui/widget/button/play_pause_button.dart';
 import 'package:oplayer/ui/widget/progress/simple_progress.dart';
 import 'package:oplayer/usecase/control/song_control_usecase.dart';
-import 'package:oplayer/usecase/song/local_song_usecase.dart';
 import 'static_disk_circle.dart';
 
 class PlaylistItem extends StatefulWidget {
@@ -67,7 +65,7 @@ class _PlaylistItemState extends State<PlaylistItem>
         children: [
           Container(
             height: 2,
-            child: SongProgress(),
+            child: SongProgress(key: widget.key),
           ),
           SizedBox(height: kTabLabelPadding.left * 0.9),
           Expanded(

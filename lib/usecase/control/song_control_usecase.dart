@@ -52,6 +52,8 @@ class SongControlUseCase {
   }
 
   Future<int>? stop() {
+    _currPathController.add("");
+    _durationController.add(0.0);
     dispose();
     return audioPlayer?.stop();
   }

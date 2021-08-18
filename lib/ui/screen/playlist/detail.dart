@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:oplayer/callback/pick_song_listener.dart';
 import 'package:oplayer/const/colors.dart';
-import 'package:oplayer/model/song/song_item.dart';
+import 'package:oplayer/data/model/song_item.dart';
 import 'package:oplayer/ui/widget/appbar/appbar.dart';
 import 'package:oplayer/ui/widget/button/controls_button.dart';
 import 'package:oplayer/ui/widget/item/animate_disk_circle.dart';

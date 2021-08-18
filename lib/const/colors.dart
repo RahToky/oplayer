@@ -6,7 +6,7 @@ abstract class MyColors {
   static final captionColor = Color(0xFF7B8498);
   static final buttonBorderColor = Colors.white24;
   static final iconColor = Color(0xFF3c3f41);
-  static final progressBgColor = Color(0xFFc5c9d4);
+  static final progressBgColor = Color(0xFFccd8e3);
   static final progressColor = Colors.orangeAccent;
   static final neumorphicBorder = Colors.white24;
 }

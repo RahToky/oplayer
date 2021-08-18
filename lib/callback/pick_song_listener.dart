@@ -1,4 +1,4 @@
-import 'package:oplayer/model/song/song_item.dart';
+import 'package:oplayer/data/model/song_item.dart';
 
 abstract class SongClickListener {
   void onSongPlay(Song? song);
