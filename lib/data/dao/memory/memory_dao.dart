@@ -6,7 +6,7 @@ import 'package:oplayer/data/model/song.dart';
 import 'package:path_provider_ex/path_provider_ex.dart';
 
 class MemoryDao {
-  Future<List<Song>> getSongs() async {
+  Future<List<Song>> loadSongs() async {
     List<Song> songs = [];
     List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
     var root = storageInfo[0]

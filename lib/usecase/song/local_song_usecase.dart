@@ -17,7 +17,7 @@ class SongUseCase {
   Future<List<Song>> getSongs() async {
     List<Song> songs = await _songDao.getSongs();
     if (songs.isEmpty) {
-      songs = await _memoryDao.getSongs();
+      songs = await _memoryDao.loadSongs();
       saveToDB(songs);
     }
     return Future.value(songs);
