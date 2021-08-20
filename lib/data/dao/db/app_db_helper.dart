@@ -15,11 +15,7 @@ class DatabaseHelper {
   static Database? _database;
 
   Future<Database> get database async {
-    dev.log('get database');
-    if (_database != null) return _database!;
-    // lazily instantiate the db the first time it is accessed
-    dev.log('get database');
-    _database = await _initDatabase();
+    if (_database == null) _database = await _initDatabase();
     return _database!;
   }
 

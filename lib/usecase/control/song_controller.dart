@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 
 class SongController {
-  static AudioPlayer? audioPlayer;
   static final SongController _instance = SongController._private();
   static StreamController<double> _durationController = StreamController();
   static StreamController<String> _currPathController = StreamController();
@@ -11,6 +10,7 @@ class SongController {
       _durationController.stream.asBroadcastStream();
   Stream<String>? currentSongPathStream =
       _currPathController.stream.asBroadcastStream();
+  static AudioPlayer? audioPlayer;
 
   SongController._private();
 

@@ -3,7 +3,11 @@ import 'package:sqflite/sqflite.dart';
 import 'app_db_helper.dart';
 
 class BaseDao<T extends Entity> {
-  final DatabaseHelper databaseHelper = DatabaseHelper.instance;
+  late final DatabaseHelper databaseHelper;
+
+  BaseDao() {
+    databaseHelper = DatabaseHelper.instance;
+  }
 
   Future<int> insert(String tableName, Map<String, dynamic> row) async {
     final Database db = await databaseHelper.database;

@@ -4,14 +4,19 @@ import 'package:oplayer/data/dao/memory/memory_dao.dart';
 import 'package:oplayer/data/model/song.dart';
 
 class SongUseCase {
-  static final SongUseCase _instance = SongUseCase._internal();
-  final MemoryDao _memoryDao = MemoryDao();
-  final SongDao _songDao = SongDao();
+  static SongUseCase? _instance;
+  late final MemoryDao _memoryDao;
+  late final SongDao _songDao;
 
-  SongUseCase._internal();
+  SongUseCase._privateConstructor();
 
   factory SongUseCase() {
-    return _instance;
+    if (_instance == null) {
+      _instance = SongUseCase._privateConstructor();
+      _instance!._memoryDao = MemoryDao();
+      _instance!._songDao = SongDao();
+    }
+    return _instance!;
   }
 
   Future<List<Song>> getSongs() async {

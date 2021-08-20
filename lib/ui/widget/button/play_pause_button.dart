@@ -19,10 +19,11 @@ class PlayPauseButton extends StatefulWidget {
 class _PlayPauseButtonState extends State<PlayPauseButton> {
   bool _isPlaying = false;
 
-  final SongController _songControlUseCase = SongController();
+  late final SongController _songControlUseCase;
 
   @override
   void initState() {
+    _songControlUseCase = SongController();
     _observeCurrPath();
     super.initState();
   }

@@ -26,12 +26,11 @@ class PlaylistItem extends StatefulWidget {
 
 class _PlaylistItemState extends State<PlaylistItem>
     implements SongClickListener {
+  late final SongController _songControlUseCase;
   final double _itemHeight = kToolbarHeight * 1.6;
   final double _iconHeight = kToolbarHeight * 0.3;
   final double _iconSpacing = kToolbarHeight * 0.3;
-  late final SongController _songControlUseCase;
   late bool _isFavorite;
-  bool _isPlaying = false;
 
   @override
   void initState() {

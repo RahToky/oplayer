@@ -15,9 +15,15 @@ class ControlsButton extends StatefulWidget {
 }
 
 class _ControlsButtonState extends State<ControlsButton> {
-  bool _isPlaying = true;
+  late final SongController _songControlUseCase;
   final double _iconControlSize = kToolbarHeight * 1.3;
-  final SongController _songControlUseCase = SongController();
+  bool _isPlaying = true;
+
+  @override
+  void initState() {
+    _songControlUseCase = SongController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
